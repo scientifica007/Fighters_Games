@@ -15,6 +15,9 @@ jobs:
         run: |
           node --check fighters.js
           node --check render.js
+          node --check visuals/stages.js
+          node --check visuals/characters.js
+          node --check visuals/combat.js
           node --check game.js
       - name: Balance and roster unit tests
         run: node --test tests/*.test.mjs
