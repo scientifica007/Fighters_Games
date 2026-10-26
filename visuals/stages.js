@@ -23,10 +23,11 @@ function tower(c,x,y,w,h,col,accent){
 function arch(c,x,y,w,h,col,accent){
   c.fillStyle=col;c.beginPath();c.moveTo(x,y+h);c.lineTo(x,y+h*.38);
   c.bezierCurveTo(x,y-h*.13,x+w,y-h*.13,x+w,y+h*.38);c.lineTo(x+w,y+h);c.closePath();c.fill();
-  c.globalCompositeOperation='destination-out';
+  // Paint an interior opening with the backdrop tint. Avoid destination-out,
+  // which would incorrectly erase the entire scene behind the arch.
+  c.fillStyle='#172d3e';
   c.beginPath();c.moveTo(x+w*.22,y+h);c.lineTo(x+w*.22,y+h*.4);
   c.bezierCurveTo(x+w*.22,y+h*.09,x+w*.78,y+h*.09,x+w*.78,y+h*.4);c.lineTo(x+w*.78,y+h);c.closePath();c.fill();
-  c.globalCompositeOperation='source-over';
   stroke(c,x+4,y+h*.32,x+w-4,y+h*.32,accent+'77',2);
   for(const xx of [x+10,x+w-10])stroke(c,xx,y+h*.32,xx,y+h*.96,accent+'52',2);
 }
