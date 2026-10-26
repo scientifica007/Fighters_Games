@@ -18,3 +18,111 @@ footer{display:flex;justify-content:space-between;gap:12px;border-top:1px solid 
 @media(hover:none),(pointer:coarse){.touch-controls{display:flex}.touch-advice{display:block}}
 @media(max-height:500px) and (orientation:landscape){.game-scene{padding-top:8px}.game-head{margin-bottom:6px}.game-head h2{font-size:18px}.game-head-actions button{padding:5px 11px}.progress-track{margin-bottom:6px}.progress-item{width:22px;min-width:22px;height:22px}.arena-frame{max-width:860px;margin:auto}.controls-help{display:none}.touch-controls{flex-direction:row;gap:6px}.touch-panel{padding:4px}.touch-panel>span{display:none}.touch-panel button{min-height:35px}.touch-advice{display:none}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* -------------------------------------------------------------------------
+   VISUAL EDITION 2 — premium arcade shell; keeps all touch breakpoints intact.
+   ------------------------------------------------------------------------- */
+:root{--gold:#f2d19b;--cyan:#86e3f3;--muted:#98abc3}
+body{background:#080d19}
+.atmosphere{
+  background:
+   radial-gradient(ellipse 52% 44% at 51% -7%,#33537678,transparent 80%),
+   radial-gradient(ellipse 36% 43% at 98% 60%,#321c5470,transparent 79%),
+   radial-gradient(ellipse 34% 35% at -4% 70%,#0e535857,transparent 78%),
+   #090e19;
+}
+.atmosphere:before{content:"";position:absolute;left:50%;top:-470px;width:930px;height:930px;transform:translateX(-50%) rotate(28deg);border:1px solid #e2c98b12;border-radius:50%;box-shadow:0 0 0 75px #ecd6a504,0 0 0 160px #d1b99404,0 0 0 275px #cbb49103;pointer-events:none}
+.brand-mark{border-radius:10px;background:linear-gradient(145deg,#3f3342,#18283d);box-shadow:inset 0 1px #fbdfb544,0 0 22px #dfbe8f16;text-shadow:0 0 15px #e8d19c88}
+.topbar{position:relative}
+.topbar:after{content:"";position:absolute;bottom:-1px;right:0;width:22%;height:1px;background:linear-gradient(270deg,#e6bc7e90,transparent)}
+.intro{position:relative;isolation:isolate}
+.intro:before{content:"✧";position:absolute;z-index:-1;font-size:420px;color:#d2a9880a;top:-145px;left:50%;transform:translateX(-50%);line-height:1}
+.intro h1{filter:drop-shadow(0 11px 30px #03081170)}
+.intro h1 em{background:linear-gradient(102deg,#dda46b 5%,#fff2ce 41%,#f2cb92 75%,#d4b4ef 100%);-webkit-background-clip:text;background-clip:text}
+.intro p{max-width:700px;color:#b4c0d1}
+.mode-switch{background:linear-gradient(125deg,#1b293c,#101c2c);border-color:#58617556;box-shadow:0 12px 36px #00000044,inset 0 1px #ffffff0c}
+.mode{transition:background .2s,transform .2s,border-color .2s}
+.mode.active{background:linear-gradient(115deg,#344257,#25364a);border-color:#b1a17e88;box-shadow:inset 0 1px #faf1d62c,0 6px 15px #070d1988}
+.mode>span{color:#e5ca98;text-shadow:0 0 16px #f6d3955e}
+.section-heading{position:relative;padding-block-end:10px}
+.section-heading:after{content:"";position:absolute;bottom:0;right:0;width:100%;height:1px;background:linear-gradient(270deg,#cebc9d44,#54647731,transparent)}
+.section-heading h2{letter-spacing:-.5px}
+.roster{gap:13px}
+.fighter-card{
+  isolation:isolate;
+  background:#101828;
+  border:1px solid #51637b80;
+  box-shadow:inset 0 1px #ffffff12,0 10px 25px #00000029;
+  transform:translateY(0);
+  transition:transform .18s,border-color .18s,box-shadow .18s,filter .18s;
+}
+.fighter-card:before{content:"";position:absolute;z-index:2;inset:0 auto 0 0;width:3px;background:linear-gradient(transparent,var(--accent),transparent);opacity:.4}
+.fighter-card:hover{transform:translateY(-7px);border-color:var(--accent);box-shadow:0 13px 34px #0008,0 0 22px color-mix(in srgb,var(--accent) 16%,transparent)}
+.fighter-card.selected{background:#1a2434;box-shadow:0 0 0 1px var(--accent),0 16px 35px #0008,0 0 36px color-mix(in srgb,var(--accent) 22%,transparent)}
+.fighter-card.selected:before{opacity:1}
+.portrait-wrap{
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 83%,color-mix(in srgb,var(--accent) 42%,transparent),transparent 90%),
+    radial-gradient(ellipse 73% 56% at 50% 46%,color-mix(in srgb,var(--accent) 13%,#101927),transparent 93%),
+    linear-gradient(140deg,#25344a,#0c1727 72%);
+}
+.portrait-wrap:before{content:"";inset:8px 7px;position:absolute;transform:none;border:1px solid #ffffff14;border-radius:65px 65px 9px 9px;box-shadow:0 0 0 12px #ffffff03}
+.portrait-wrap:after{content:"";position:absolute;inset:8px 19px auto;border-top:1px solid color-mix(in srgb,var(--accent) 53%,transparent);box-shadow:0 0 18px color-mix(in srgb,var(--accent) 30%,transparent)}
+.portrait-wrap canvas{filter:drop-shadow(0 8px 5px #03091388) drop-shadow(0 0 8px color-mix(in srgb,var(--accent) 30%,transparent));transition:transform .22s}
+.fighter-card:hover .portrait-wrap canvas,.fighter-card.selected .portrait-wrap canvas{transform:scale(1.06) translateY(-2px)}
+.fighter-info{position:relative;background:linear-gradient(170deg,#1f2c3e,#111a2b 83%)}
+.fighter-info:before{content:"";height:1px;position:absolute;top:0;right:0;left:0;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.65}
+.fighter-info b{font-weight:850;letter-spacing:.2px}
+.fighter-info small{color:#b6c1d3}
+.fighter-info .special-label{border-top:1px solid #e8f1ff17;padding-top:9px;font-weight:650}
+.launch-panel{
+  position:relative;isolation:isolate;
+  border:1px solid #ad997659;
+  background:linear-gradient(103deg,#243246 5%,#131e2f 57%,#0e1827);
+  box-shadow:0 17px 44px #0006,inset 0 1px #e3c88b20;
+}
+.launch-panel:before{content:"";z-index:-1;position:absolute;width:360px;height:360px;left:-88px;top:-85px;border:1px solid #edca8c16;border-radius:50%;box-shadow:0 0 0 45px #f3cd7906,0 0 0 95px #daba7d06}
+.launch-preview{position:relative;background:radial-gradient(ellipse at center,#53617942,transparent 70%)}
+.launch-preview:after{content:"";position:absolute;inset:auto 4% 14% 4%;height:1px;background:linear-gradient(90deg,transparent,#f9e3c65e,transparent)}
+.versus-figure canvas{filter:drop-shadow(0 8px 8px #050913bd)}
+.vs{font-size:36px;text-shadow:0 0 18px #ffd49a7e;font-weight:950;transform:rotate(-10deg)}
+.launch-content h3{font-weight:880;color:#f7f2e9}
+.primary{
+ background:linear-gradient(125deg,#ffe9b9,#e8bd7b 70%,#d29c5f);
+ color:#172033;box-shadow:0 3px 0 #7f603c,0 10px 20px #0004;
+ transition:transform .15s,filter .15s;
+}
+.primary:hover{transform:translateY(-2px);filter:brightness(1.07)}
+.primary:active{transform:translateY(1px);box-shadow:0 1px 0 #7f603c}
+.secondary{background:linear-gradient(#29384c,#1d2b40);border-color:#65718a70}
+.bottom-info>div{padding:16px 16px 11px;border:1px solid #ffffff15;border-top-color:#947b5b66;border-radius:12px;background:linear-gradient(#18233773,#10182745)}
+.bottom-info b{color:#e9d2a7}
+.game-scene{animation:arena-enter .35s ease both}
+@keyframes arena-enter{from{opacity:.3;transform:translateY(7px)}to{opacity:1;transform:none}}
+.game-head{padding:5px 0}
+.game-head h2{color:#f8ead0;text-shadow:0 2px 15px #d3ab733a}
+.progress-item{transition:transform .2s,border-color .2s}
+.progress-item.now{transform:translateY(-2px) scale(1.06);box-shadow:0 0 20px #f4c98455}
+.arena-frame{
+  border:2px solid #7481988c;
+  box-shadow:0 0 0 1px #0e213c,0 14px 65px #000b,0 0 33px #84b1d91b;
+}
+.arena-frame:before{content:"";position:absolute;z-index:1;inset:0;pointer-events:none;border-radius:13px;box-shadow:inset 0 0 45px #050b1391}
+.arena-frame>canvas{image-rendering:auto}
+.arena-bottom{position:relative;z-index:2;background:linear-gradient(100deg,#101c2e,#131d2c)}
+.control-card{box-shadow:inset 0 1px #ffffff08;border-color:#40516999}
+.control-card>div b{font-size:14px}
+kbd{background:linear-gradient(#33455c,#223349);border-color:#66758d;box-shadow:0 2px 0 #0d1724;color:#f1e2c6}
+.modal{box-shadow:0 20px 80px #000c,0 0 55px #dfb27f23;border-color:#b8a07b76}
+.modal h2{color:#ffe9bd}
+footer{border-top-color:#b8a58120}
+@media (max-width:580px){
+ .intro:before{font-size:260px;top:-45px}
+ .fighter-card:hover{transform:none}
+ .roster{gap:8px}
+ .fighter-card.selected{box-shadow:0 0 0 1px var(--accent),0 0 18px color-mix(in srgb,var(--accent) 16%,transparent)}
+ .launch-panel{margin-top:25px}
+ .bottom-info>div{padding:12px}
+ .arena-frame{border-width:1px}
+}
+@media(prefers-reduced-motion:reduce){.game-scene{animation:none}.mode,.fighter-card,.portrait-wrap canvas,.primary{transition:none}}
