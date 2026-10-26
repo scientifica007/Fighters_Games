@@ -66,3 +66,7 @@ python3 -m http.server 8000
 - جميع الشخصيات والتصميمات أصلية لهذا المشروع.
 
 **ملاحظة تشغيلية:** فتح index.html مباشرة بصيغة file:// قد يُحظر بسبب الاستيراد المحلي للوحدات في بعض المتصفحات. استعمل خادم الملفات المذكور أو GitHub Pages.
+
+## نشر الموقع على GitHub Pages
+
+يلزم تفعيل Pages **مرة واحدة من حساب مالك المستودع**. افتح **Settings → Pages** ثم اختر **Build and deployment → Source → GitHub Actions**. بعد حفظ الإعدادات افتح **Actions → Publish game to GitHub Pages → Run workflow**. سيكون عنوان الموقع عند اكتمال النشر: https://scientifica007.github.io/Fighters_Games/ . لا يعتبر الرابط حياً حتى ينجح سير عمل النشر.
