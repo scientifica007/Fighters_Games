@@ -17,4 +17,4 @@ jobs:
           node --check render.js
           node --check game.js
       - name: Balance and roster unit tests
-        run: node --test tests/balance.test.mjs
+        run: node --test tests/*.test.mjs
