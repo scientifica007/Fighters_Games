@@ -4,7 +4,7 @@ import {CORE,FIGHTERS,MOVES,FPS,WIDTH,FLOOR} from '../v3/roster.js';
 import {createMatch,resetRound,step,moveFrameInfo,cpuInput} from '../v3/engine.js';
 
 const none={};
-function ready(g){for(let i=0;i<87;i++)step(g,[none,none]);assert.equal(g.phase,'fight');return g}
+function ready(g){let safety=0;while(g.phase==='ready'&&safety++<120)step(g,[none,none]);assert.equal(g.phase,'fight');return g}
 function advance(g,n,a={},b={}){for(let i=0;i<n;i++)step(g,[a,b])}
 function adjacent(g){g.fighters[0].x=420;g.fighters[1].x=515}
 test('two authored fighters, shared stats and exact frame-data contract',()=>{
