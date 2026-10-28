@@ -1,0 +1,36 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Browser arena smoke probe</title>
+<style>html,body{margin:0;background:#fff;color:#111;font-family:monospace}iframe{width:850px;height:420px;border:0}</style>
+</head><body>
+<div id="result">PROBE_PENDING</div>
+<iframe id="game" src="../" title="live game under test"></iframe>
+<script>
+const result=document.querySelector('#result');
+let finished=false;
+const fail=msg=>{if(!finished){finished=true;result.textContent='PROBE_FAILED '+msg}};
+setTimeout(()=>fail('timed out'),8000);
+const frame=document.getElementById('game');
+frame.addEventListener('load',()=>{
+ setTimeout(()=>{
+  try{
+   const d=frame.contentDocument;
+   if(!d.querySelector('#roster .fighter'))throw Error('roster unrendered');
+   d.getElementById('playBtn').click();
+   if(d.getElementById('battle').hidden)throw Error('battle not shown');
+   const move=d.querySelectorAll('#touchMove button');
+   const attack=d.querySelectorAll('#touchFight button');
+   if(move.length!==4||attack.length!==4)throw Error('mobile controls not mounted');
+   if(!['left','right','jump','guard'].every(k=>[...move].some(b=>b.dataset.action===k)))throw Error('movement actions missing');
+   if(!['light','heavy','special','super'].every(k=>[...attack].some(b=>b.dataset.action===k)))throw Error('attack actions missing');
+   setTimeout(()=>{
+    try{
+     const arena=d.getElementById('arena');
+     const pix=arena.getContext('2d').getImageData(560,300,1,1).data;
+     if(pix[3]===0)throw Error('game canvas still blank');
+     if(!finished){finished=true;result.textContent='ARENA_SMOKE_OK';}
+    }catch(e){fail(e.message)}
+   },950);
+  }catch(e){fail(e.message)}
+ },450);
+});
+</script>
+</body></html>
