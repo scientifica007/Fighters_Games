@@ -104,3 +104,25 @@ export const FACE_PROFILES=Object.freeze({
  azur:Object.freeze({shape:'angular jaw',eyes:'blue-grey',hair:'silver short',detail:'scar and goatee'}),
  nara:Object.freeze({shape:'round heart',eyes:'emerald',hair:'orange long ponytail',detail:'freckles and earring'})
 });
+
+
+// Enlarged character likeness for HUD and character selection. This is an
+// actual re-rendered face at portrait scale, not a scaled-up generic icon.
+export function drawFaceAvatar(c,id,x,y,size=60){
+ const r=size/2;
+ c.save();
+ c.beginPath();c.arc(x,y,r,0,T);c.clip();
+ const g=c.createLinearGradient(x-r,y-r,x+r,y+r);
+ if(id==='azur'){g.addColorStop(0,'#29465b');g.addColorStop(1,'#0c1e36')}
+ else{g.addColorStop(0,'#833d54');g.addColorStop(1,'#2b1a38')}
+ c.fillStyle=g;c.fillRect(x-r,y-r,size,size);
+ const scale=size/77;
+ c.translate(x,y+160*scale);
+ c.scale(scale,scale);
+ polygon(c,[[-33,-141],[-22,-129],[-28,-97],[28,-97],[22,-129],[33,-141]],
+  id==='azur'?'#224d72':'#9f4b53');
+ drawFace(c,id,0,{},1);
+ c.restore();
+ c.save();c.beginPath();c.arc(x,y,r-1,0,T);c.lineWidth=2.5;
+ c.strokeStyle=id==='azur'?'#82dff3':'#f8bf99';c.stroke();c.restore();
+}
