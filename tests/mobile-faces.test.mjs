@@ -59,7 +59,7 @@ test('fighter profiles distinguish physical facial features and portraits render
  const ctx={beginPath(){},moveTo(){},lineTo(){},closePath(){},
   stroke(){draws.push('stroke')},fill(){draws.push('fill')},
   arc(){},ellipse(){},rect(){},fillRect(){draws.push('rect')},
-  save(){},restore(){},translate(){},scale(){},clip(){},
+  save(){},restore(){},translate(){},scale(){},rotate(){},clip(){},
   createLinearGradient:g,createRadialGradient:g
  };
  for(const fighter of ['azur','nara']){
