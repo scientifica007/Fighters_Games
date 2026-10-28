@@ -26,3 +26,18 @@ jobs:
           node --check v3/main.js
       - name: Balance and roster unit tests
         run: node --test tests/*.test.mjs
+      - name: Headless browser smoke (menu and generated fighter portraits)
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/fighters-server.log 2>&1 &
+          sleep 1
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME" ]; then
+            echo "Headless Chrome unavailable on runner; JS tests are still enforced."
+          else
+            timeout 45 "$CHROME" --headless --no-sandbox --disable-dev-shm-usage \
+              --disable-gpu --no-first-run --virtual-time-budget=4500 \
+              --dump-dom http://127.0.0.1:8765/ > /tmp/fighters-rendered.html 2> /tmp/fighters-chrome.log
+            grep -q 'class="fighter-details"' /tmp/fighters-rendered.html
+            grep -q 'fighter selected' /tmp/fighters-rendered.html
+            echo "Browser imported v3 modules and rendered character cards successfully."
+          fi
