@@ -13,7 +13,7 @@
 <header class="site-header">
  <div class="header-inner">
   <a class="wordmark" href="./"><span class="emblem">✦</span><span>صِراعُ العَناصِر<small>ELEMENTAL RIVALS / DUEL REBORN</small></span></a>
-  <div class="header-links"><span class="edition">الإصدار التجريبي 3.0</span><a class="old-version" href="./classic/">النسخة الكلاسيكية <span aria-hidden="true">↗</span></a></div>
+  <div class="header-links"><span class="edition">الإصدار التجريبي 3.1 · Mobile Controls & Faces</span><a class="old-version" href="./classic/">النسخة الكلاسيكية <span aria-hidden="true">↗</span></a></div>
  </div>
 </header>
 <main class="layout">
@@ -67,7 +67,9 @@
      <button id="exitBtn" class="subtle-button" type="button">القائمة ↗</button>
     </div>
   </div>
-  <div id="screen" class="game-frame">
+  <div class="arena-layout" id="arenaLayout">
+   <div id="touchMove" class="touch-side touch-left" aria-label="منطقة الحركة يسار الحلبة"></div>
+   <div id="screen" class="game-frame">
     <canvas id="arena" width="1120" height="630" aria-label="لعبة القتال: شخصيتان متواجهتان داخل قلعة الفجر"></canvas>
     <div id="intermission" class="intermission" hidden>
       <div class="dialog">
@@ -88,12 +90,13 @@
         <div class="dialog-actions"><button id="resumeBtn" class="primary-button" type="button">استئناف ←</button><button id="pauseMenuBtn" class="subtle-button" type="button">القائمة</button></div>
       </div>
     </div>
+   </div>
+   <div id="touchFight" class="touch-side touch-right" aria-label="منطقة الهجوم يمين الحلبة"></div>
   </div>
   <div class="controls">
     <div class="control-keyboard"><div class="control-title"><span class="player-dot cyan"></span><b>المقاتل الأول</b></div><p><kbd>A</kbd> <kbd>D</kbd> حركة، <kbd>W</kbd> قفز، <kbd>S</kbd> صدّ، <kbd>F</kbd> سريعة، <kbd>G</kbd> ثقيلة، <kbd>H</kbd> خاصة، <kbd>U</kbd> خارقة</p></div>
     <div class="control-keyboard" id="controlsTwo"><div class="control-title"><span class="player-dot coral"></span><b>المقاتل الثاني</b></div><p><kbd>←</kbd> <kbd>→</kbd> حركة، <kbd>↑</kbd> قفز، <kbd>↓</kbd> صدّ، <kbd>J</kbd> سريعة، <kbd>K</kbd> ثقيلة، <kbd>L</kbd> خاصة، <kbd>O</kbd> خارقة</p></div>
   </div>
-  <div id="touch" class="touch" aria-label="أزرار التحكم اللمسية"></div>
   <div class="battle-tip"><span>TIP</span> بعد إصابة ضربة خفيفة، اضغط الثقيلة ثم الخاصة لإلغاء الحركة وتكوين مجموعة. <strong>المهارة الخاصة تستهلك 25 طاقة، والخارقة 100.</strong></div>
  </section>
 </main>
