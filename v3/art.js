@@ -127,19 +127,72 @@ function drawNara(c,pose,frame){
   c.restore();
  }
 }
-function poseFor(state,phase){
- const p={step:0,torso:0,hand:0,reachY:0,legY:-3,swordAngle:0,power:false};
+// Smoothly interpolated key poses create anticipation -> contact -> follow-through.
+// Hit timing stays owned by the 60 Hz combat engine.
+function keyframe(t,keys){
+ if(t<=keys[0][0])return keys[0][1];
+ for(let i=1;i<keys.length;i++){
+  if(t<=keys[i][0]){
+   let u=(t-keys[i-1][0])/(keys[i][0]-keys[i-1][0]);
+   u=u*u*(3-2*u);
+   return keys[i-1][1]+(keys[i][1]-keys[i-1][1])*u;
+  }
+ }
+ return keys[keys.length-1][1];
+}
+function poseFor(state,phase,id){
+ const nara=id==='nara',p={step:0,torso:0,hand:0,reachY:0,legY:-3,swordAngle:0,power:false};
  const wave=Math.sin(phase/12*Math.PI*2);
- if(state==='idle'){p.torso=Math.sin(phase/12*Math.PI*2)*2;p.hand=1+Math.sin(phase/12*Math.PI*2)*3;p.swordAngle=.17}
- if(state==='walk'){p.step=wave*19;p.hand=-wave*10;p.torso=Math.abs(wave)*1.5;p.swordAngle=.1+wave*.07}
- if(state==='jump'){p.torso=-5;p.step=phase<4?6:phase<9?-13:4;p.legY=-13;p.swordAngle=-.08}
+ if(state==='idle'){
+  p.torso=Math.sin(phase/12*Math.PI*2)*2.1;
+  p.hand=(nara?-3:1)+Math.sin(phase/12*Math.PI*2)*2.3;
+  p.swordAngle=.17;
+ }
+ if(state==='walk'){
+  p.step=wave*(nara?21:18);
+  p.hand=-wave*(nara?13:9);
+  p.torso=Math.abs(wave)*1.4;
+  p.swordAngle=.1+wave*.07;
+ }
+ if(state==='jump'){
+  p.torso=keyframe(phase,[[0,-2],[3,-8],[7,-4],[11,1]]);
+  p.step=keyframe(phase,[[0,8],[3,12],[7,-16],[11,-6]]);
+  p.hand=keyframe(phase,[[0,0],[3,-8],[7,16],[11,4]]);
+  p.legY=-12;p.swordAngle=-.08;
+ }
  if(state==='guard'){p.torso=-6;p.hand=-18;p.reachY=28;p.swordAngle=.9}
- if(state==='crouch'){p.torso=29;p.step=9;p.hand=1;p.reachY=10;p.legY=-3;p.swordAngle=.3}
- if(state==='hurt'){p.torso=3;p.hand=-22;p.swordAngle=.8;p.step=-7}
- if(state==='light'){p.hand=phase<3?-13:phase<7?41:phase<10?22:4;p.reachY=phase<7?13:3;p.swordAngle=phase<3?.6:phase<8?-1.08:.2}
- if(state==='heavy'){p.step=phase<6?-8:phase<11?13:17;p.hand=phase<6?-27:phase<12?5:phase<17?54:9;p.torso=phase>9?4:0;p.reachY=phase>10&&phase<21?23:0;p.swordAngle=phase<10?1.1:phase<18?-1.34:.1}
- if(state==='special'){p.step=phase<8?-7:phase<24?17:5;p.hand=phase<11?-30:phase<28?51:8;p.reachY=phase>12?24:5;p.power=phase>7&&phase<34;p.swordAngle=phase<13?1:phase<30?-.9:.3}
- if(state==='super'){p.step=phase<9?-9:22;p.torso=-4;p.hand=phase<12?-35:60;p.reachY=phase>11?36:0;p.power=true;p.swordAngle=phase<13?1.3:-1.2}
+ if(state==='crouch'){p.torso=27;p.step=9;p.hand=1;p.reachY=10;p.legY=-3;p.swordAngle=.3}
+ if(state==='hurt'){p.torso=keyframe(phase,[[0,-3],[2,6],[4,2]]);p.hand=-22;p.swordAngle=.8;p.step=-7}
+ if(state==='light'){
+  p.hand=keyframe(phase,nara?[[0,-14],[2,-21],[4,48],[7,58],[10,5]]:[[0,-12],[2,-19],[5,47],[7,54],[11,1]]);
+  p.reachY=keyframe(phase,[[0,0],[3,5],[6,20],[10,0]]);
+  p.step=keyframe(phase,[[0,-3],[5,9],[10,1]]);
+  p.torso=keyframe(phase,[[0,0],[5,-3],[10,0]]);
+  p.swordAngle=keyframe(phase,[[0,.7],[3,.9],[6,-1.1],[11,.16]]);
+ }
+ if(state==='heavy'){
+  p.hand=keyframe(phase,[[0,0],[5,-30],[10,-33],[15,65],[21,4]]);
+  p.reachY=keyframe(phase,[[0,0],[9,6],[16,30],[22,0]]);
+  p.step=keyframe(phase,[[0,0],[8,-13],[14,19],[22,3]]);
+  p.torso=keyframe(phase,[[0,-2],[13,7],[22,0]]);
+  p.swordAngle=keyframe(phase,[[0,.4],[10,1.3],[16,-1.5],[23,.2]]);
+ }
+ if(state==='special'){
+  p.hand=keyframe(phase,[[0,-7],[6,-35],[13,-35],[22,67],[34,5]]);
+  p.reachY=keyframe(phase,[[0,0],[10,8],[21,32],[33,0]]);
+  p.step=keyframe(phase,[[0,0],[10,-12],[21,20],[33,5]]);
+  p.torso=keyframe(phase,[[0,0],[11,-6],[23,4],[34,0]]);
+  p.power=phase>8&&phase<34;
+  p.swordAngle=keyframe(phase,[[0,.6],[13,1.15],[21,-1.15],[34,.15]]);
+ }
+ if(state==='super'){
+  p.step=keyframe(phase,[[0,0],[8,-15],[17,25],[29,5]]);
+  p.torso=keyframe(phase,[[0,-2],[13,-10],[19,6],[29,0]]);
+  p.hand=keyframe(phase,[[0,-15],[10,-40],[18,73],[29,5]]);
+  p.reachY=keyframe(phase,[[0,0],[12,10],[19,41],[29,0]]);
+  p.power=true;
+  p.swordAngle=keyframe(phase,[[0,.5],[12,1.42],[19,-1.52],[29,.1]]);
+ }
  if(state==='ko'){p.torso=12;p.step=14;p.hand=2;p.swordAngle=1.5}
  if(state==='win'){p.hand=28;p.reachY=31;p.swordAngle=-1.4;p.torso=-3}
  return p;
@@ -148,7 +201,7 @@ function renderCell(info,state,frame){
  const canvas=document.createElement('canvas');canvas.width=CW;canvas.height=CH;
  const c=canvas.getContext('2d');
  c.save();c.translate(CW/2,270);
- const p=poseFor(state,frame);
+ const p=poseFor(state,frame,info.id);
  if(state==='ko'){c.translate(-26,-8);c.rotate(-1.25)}
  if(state==='heavy'&&frame>=11&&frame<19)c.rotate(-.045);
  if(state==='special'&&frame>10&&frame<27)c.rotate(-.065);
