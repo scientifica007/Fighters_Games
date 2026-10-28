@@ -152,3 +152,24 @@ kbd{display:inline-block;direction:ltr;min-width:24px;color:#f8ead0;border:1px s
  .pad-label{font-size:10px}
 }
 @media(prefers-reduced-motion:reduce){.pad-button{transition:none}}
+
+
+/* Ergonomics refinement: 2×2 thumb grid guarantees wide hit areas on
+   700–900 CSS-pixel landscape viewports, unlike three tiny arrow columns. */
+@media (pointer:coarse),(hover:none){
+ .mobile-pad.movement{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-areas:"left right" "jump guard";
+ }
+ .pad-button{min-height:52px}
+}
+@media (pointer:coarse) and (orientation:landscape),(hover:none) and (orientation:landscape){
+ .arena-layout{grid-template-columns:clamp(116px,19vw,215px) minmax(0,1fr) clamp(134px,21vw,235px)}
+ .pad-button{min-height:clamp(47px,13vh,72px)}
+}
+@media (max-width:760px) and (pointer:coarse) and (orientation:landscape){
+ .arena-layout{grid-template-columns:clamp(112px,19vw,150px) minmax(0,1fr) clamp(130px,22vw,170px)}
+}
+@media (max-height:365px) and (pointer:coarse) and (orientation:landscape){
+ .pad-button{min-height:clamp(44px,13vh,53px)}
+}
