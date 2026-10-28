@@ -199,12 +199,14 @@ function updateFighter(g,f,other,input){
 }
 function separate(g){
  const [a,b]=g.fighters;
- // Pushboxes are separate from hurtboxes to avoid visually intersecting sprites.
- const diff=b.x-a.x,min=76;
+ // Solve the pair as a single constrained interval. Independent clamping
+ // would let pushboxes overlap when both actors are pinned to a stage wall.
+ const min=76,diff=b.x-a.x;
  if(Math.abs(diff)<min){
-   const sign=diff>=0?1:-1,delta=(min-Math.abs(diff))/2;
-   a.x=clamp(a.x-sign*delta,55,WIDTH-55);
-   b.x=clamp(b.x+sign*delta,55,WIDTH-55);
+   const left=diff>=0?a:b,right=diff>=0?b:a;
+   const midpoint=(a.x+b.x)/2;
+   left.x=clamp(midpoint-min/2,55,WIDTH-55-min);
+   right.x=left.x+min;
  }
  a.dir=b.x>=a.x?1:-1;b.dir=-a.dir;
 }
