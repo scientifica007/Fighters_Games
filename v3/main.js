@@ -3,6 +3,7 @@ import {createMatch,resetRound,step,moveFrameInfo} from './engine.js';
 import {drawSprite,drawPortrait} from './art.js';
 import {drawArena} from './stage.js';
 import {mountMobileControls} from './mobile-controls.js';
+import {drawFaceAvatar} from './faces.js';
 
 const $=id=>document.getElementById(id);
 const ctx=$('arena').getContext('2d'),keys=new Set(),touches=new Set();
@@ -198,7 +199,7 @@ function hud(c,g){
   const f=g.fighters[n],first=n===0,x=first?26:639,end=first?'left':'right';
   const face=first?35:1085;
   rr(c,first?27:1020,21,68,55,9,names[n].deep,names[n].color+'a9');
-  text(c,first?'01':'02',first?61:1053,35,11,'#ffe8c1','center');
+  drawFaceAvatar(c,f.id,first?61:1053,48,52);
   text(c,names[n].name,first?108:1005,38,22,'#fff5dd',end,900);
   text(c,names[n].title,first?108:1005,64,12,'#b9cadb',end,600);
   bar(c,x,82,456,18,f.hp/CORE.health,first?'#58dafa':'#f78592',!first);
