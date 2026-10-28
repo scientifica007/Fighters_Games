@@ -2,11 +2,13 @@ import {WIDTH,HEIGHT,FLOOR,FPS,CORE,MOVES,FIGHTERS,getFighter} from './roster.js
 import {createMatch,resetRound,step,moveFrameInfo} from './engine.js';
 import {drawSprite,drawPortrait} from './art.js';
 import {drawArena} from './stage.js';
+import {mountMobileControls} from './mobile-controls.js';
 
 const $=id=>document.getElementById(id);
 const ctx=$('arena').getContext('2d'),keys=new Set(),touches=new Set();
 let mode='cpu',difficulty='normal',picks=['azur','nara'],game=null,paused=false,sfx=true;
 let lastTime=0,accumulator=0,ticker=0,audio=null,debug=false,seenResult=false;
+let mobileControls=null;
 const KEY={
  KeyA:[0,'left'],KeyD:[0,'right'],KeyW:[0,'jump'],KeyS:[0,'guard'],
  KeyF:[0,'light'],KeyG:[0,'heavy'],KeyH:[0,'special'],KeyU:[0,'super'],
@@ -40,7 +42,7 @@ function card(f,slot){
  b.querySelector('.title').textContent=f.title+' · '+f.subtitle;
  b.querySelector('p').textContent=f.description;
  b.querySelector('.ability').textContent='✦ '+f.signature;
- const c=b.querySelector('canvas').getContext('2d');drawPortrait(c,f.id,131,262,1.05);
+ const c=b.querySelector('canvas').getContext('2d');drawPortrait(c,f.id,131,281,1.16);
  b.addEventListener('click',()=>{
   picks[slot]=f.id;
   if(mode==='cpu'&&slot===0)picks[1]=f.id==='azur'?'nara':'azur';
@@ -78,28 +80,18 @@ function renderSelection(){
 for(const b of document.querySelectorAll('[data-mode]'))b.addEventListener('click',()=>{mode=b.dataset.mode;if(mode==='cpu')picks[1]=picks[0]==='azur'?'nara':'azur';renderSelection()});
 for(const b of document.querySelectorAll('[data-diff]'))b.addEventListener('click',()=>{difficulty=b.dataset.diff;renderSelection()});
 renderSelection();
+function clearTouch(){
+ mobileControls?.release();
+ touches.clear();
+}
 function buildTouch(){
- const root=$('touch');root.replaceChildren();
- for(let p=0;p<(mode==='duel'?2:1);p++){
-  const panel=document.createElement('div');panel.className='touch-set';
-  const title=document.createElement('span');title.className='touch-title';title.textContent='المقاتل '+(p+1);panel.append(title);
-  for(const [key,text] of [['left','◀'],['right','▶'],['jump','↑'],['guard','صدّ'],['light','سريعة'],['heavy','ثقيلة'],['special','خاصة'],['super','خارقة']]){
-   const btn=document.createElement('button');btn.type='button';btn.textContent=text;
-   if(key==='special'||key==='super')btn.classList.add('special');
-   btn.setAttribute('aria-label','اللاعب '+(p+1)+' '+text);
-   const token=p+':'+key;
-   btn.addEventListener('pointerdown',e=>{
-    if(!game||paused||game.phase!=='fight')return;
-    e.preventDefault();try{btn.setPointerCapture(e.pointerId)}catch{}
-    touches.add(token);btn.classList.add('pressed');
-   });
-   const up=e=>{touches.delete(token);btn.classList.remove('pressed');if(e)e.preventDefault()};
-   btn.addEventListener('pointerup',up);btn.addEventListener('pointercancel',up);
-   btn.addEventListener('lostpointercapture',()=>up());
-   panel.append(btn);
-  }
-  root.append(panel);
- }
+ clearTouch();
+ mobileControls=mountMobileControls(
+  $('touchMove'),$('touchFight'),
+  key=>touches.add('0:'+key),
+  key=>touches.delete('0:'+key),
+  ()=>!!game&&!paused&&game.phase==='fight'
+ );
 }
 function inputFor(p){
  const data={left:false,right:false,jump:false,guard:false,light:false,heavy:false,special:false,super:false};
@@ -111,7 +103,7 @@ function inputFor(p){
 }
 function begin(){
  game=createMatch({mode,p1:picks[0],p2:picks[1],difficulty});seenResult=false;paused=false;
- keys.clear();touches.clear();accumulator=0;lastTime=performance.now();
+ keys.clear();clearTouch();accumulator=0;lastTime=performance.now();
  $('selection').hidden=true;$('battle').hidden=false;
  $('intermission').hidden=true;$('pauseLayer').hidden=true;
  $('controlsTwo').hidden=mode!=='duel';buildTouch();
@@ -121,7 +113,7 @@ function begin(){
 }
 $('playBtn').addEventListener('click',()=>{begin();sound(400,.25,'sawtooth',.03)});
 function toMenu(){
- game=null;paused=false;keys.clear();touches.clear();$('battle').hidden=true;$('selection').hidden=false;
+ game=null;paused=false;keys.clear();clearTouch();$('battle').hidden=true;$('selection').hidden=false;
  $('intermission').hidden=true;$('pauseLayer').hidden=true;renderSelection();
  window.scrollTo({top:0,behavior:'instant'});
 }
@@ -132,12 +124,12 @@ $('restartBtn').addEventListener('click',begin);
 $('advanceBtn').addEventListener('click',()=>{
  if(!game||game.phase!=='roundOver')return;
  resetRound(game);seenResult=false;$('intermission').hidden=true;
- keys.clear();touches.clear();lastTime=performance.now();accumulator=0;
+ keys.clear();clearTouch();lastTime=performance.now();accumulator=0;
 });
 function pause(force){
  if(!game||game.phase==='matchOver'||game.phase==='roundOver')return;
  paused=typeof force==='boolean'?force:!paused;
- $('pauseLayer').hidden=!paused;keys.clear();touches.clear();
+ $('pauseLayer').hidden=!paused;keys.clear();clearTouch();
  accumulator=0;lastTime=performance.now();
 }
 $('pauseBtn').addEventListener('click',()=>pause());
@@ -155,7 +147,7 @@ window.addEventListener('keydown',e=>{
 window.addEventListener('keyup',e=>{
  keys.delete(e.code);if(game&&KEY[e.code])e.preventDefault();
 },{passive:false});
-window.addEventListener('blur',()=>{keys.clear();touches.clear();if(game&&!paused&&game.phase==='fight')pause(true)});
+window.addEventListener('blur',()=>{keys.clear();clearTouch();if(game&&!paused&&game.phase==='fight')pause(true)});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&game&&!paused&&game.phase==='fight')pause(true)});
 function eventSound(events){
  for(const e of events){
@@ -285,8 +277,8 @@ function renderGame(t){
   const opacity=f.flash>0&&f.flash%3===0?.8:1;
   ctx.save();
   ctx.fillStyle='#060f1c84';ctx.beginPath();ctx.ellipse(f.x,FLOOR+7,46,11,0,0,Math.PI*2);ctx.fill();ctx.restore();
-  const state=artState(f),frame=f.action?Math.floor(f.action.frame/2):Math.floor(f.anim/4);
-  drawSprite(ctx,f.id,state,frame,f.x,f.y,1.15,f.dir,opacity);
+  const state=artState(f),frame=f.action?Math.floor(f.action.frame/2):Math.floor(f.anim/(state==='walk'?2.1:4));
+  drawSprite(ctx,f.id,state,frame,f.x,f.y,1.22,f.dir,opacity);
  }
  renderFX(ctx,g,t);if(debug)renderHitboxes(ctx,g);
  ctx.restore();
