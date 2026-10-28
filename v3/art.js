@@ -2,6 +2,7 @@
 // Every displayed pose is rasterized once into an offscreen 260x310 frame,
 // then reused as a normal sprite. No per-frame rig path construction in arena.
 import {getFighter} from './roster.js';
+import {drawFace} from './faces.js';
 const CW=260,CH=310;const TAU=Math.PI*2;
 const cache=new Map();
 const limit=(n,a,b)=>Math.max(a,Math.min(b,n));
@@ -64,18 +65,8 @@ function drawAzur(c,pose,frame){
  // Back arm
  stroke(c,[[-30,-122+torsoY],[-45,-98+torsoY],[-30,-80+torsoY]],15,p.shade);
  armor(c,-39,-101+torsoY,10,p);
- // Neck and strong face silhouette
- square(c,-9,-145+torsoY,18,17,3,p.skin);
- oval(c,0,-161+torsoY,21,27,p.skin,'#20253b',2);
- shape(c,[[-12,-168+torsoY],[1,-179+torsoY],[19,-168+torsoY],[17,-158+torsoY],[11,-174+torsoY],[-11,-162+torsoY]],'#f4bd9d',null);
- stroke(c,[[6,-163+torsoY],[15,-163+torsoY]],2,p.boot,null);
- stroke(c,[[12,-150+torsoY],[18,-152+torsoY]],1.2,p.boot,null);
- // Pale hair + tied high crest, long wind-reactive lock.
- shape(c,[[-24,-170+torsoY],[-26,-192+torsoY],[-10,-200+torsoY],[6,-214+torsoY],[25,-195+torsoY],[23,-166+torsoY],
-  [14,-178+torsoY],[7,-180+torsoY],[-9,-175+torsoY],[-18,-158+torsoY]],p.hair,p.boot,3);
- shape(c,[[-9,-197+torsoY],[6,-217+torsoY],[15,-199+torsoY],[27,-190+torsoY],[15,-187+torsoY]],'#c1e1de',null);
- shape(c,[[-17,-172+torsoY],[-36,-150+torsoY],[-40+wind,-108+torsoY],[-29,-137+torsoY],[-14,-160+torsoY]],'#d9edeb',p.boot,2);
- shape(c,[[16,-175+torsoY],[38,-158+torsoY],[38+wind,-120+torsoY],[28,-147+torsoY],[14,-160+torsoY]],'#bad5d8',p.boot,2);
+ // Individual face rig: angular scarred veteran Azur, not a generic oval.
+ drawFace(c,'azur',torsoY,pose,frame);
  // Tall asymmetric shoulder armor.
  armor(c,-33,-123+torsoY,21,p);
  armor(c,34,-122+torsoY,19,p);
@@ -120,21 +111,8 @@ function drawNara(c,pose,frame){
  // Rear bent arm with elbow guards.
  stroke(c,[[-27,-124+torsoY],[-41,-100+torsoY],[-29,-88+torsoY]],15,p.shade);
  armor(c,-39,-101+torsoY,10,p);
- // Face and distinct braid/ponytail.
- square(c,-8,-145+torsoY,16,20,4,p.skin);
- oval(c,0,-163+torsoY,20,26,p.skin,p.boot);
- shape(c,[[-22,-164+torsoY],[-23,-190+torsoY],[-5,-199+torsoY],[15,-196+torsoY],[23,-180+torsoY],[18,-164+torsoY],
- [7,-179+torsoY],[-8,-174+torsoY]],p.hair,p.boot,3);
- shape(c,[[-18,-183+torsoY],[-14,-192+torsoY],[14,-188+torsoY],[20,-180+torsoY],[14,-176+torsoY]],'#e77b5b',null);
- // Long high braid in three readable chunky sections
- stroke(c,[[-15,-183+torsoY],[-31,-199+torsoY],[-41-braid,-191+torsoY],[-50-braid,-162+torsoY],[-65-braid,-150+torsoY]],16,p.hair);
- for(let i=0;i<4;i++)square(c,-46-braid-i*3,-188+torsoY+i*11,12,4,2,p.trim);
- oval(c,-65-braid,-148+torsoY,10,7,'#f6c075');
- // Headband
- stroke(c,[[-19,-170+torsoY],[3,-177+torsoY],[19,-168+torsoY]],5,p.shade,null);
- shape(c,[[17,-169+torsoY],[36,-165+torsoY],[54+braid,-155+torsoY],[29,-153+torsoY]],p.trim,null);
- stroke(c,[[3,-166+torsoY],[12,-165+torsoY]],2,p.boot,null);
- stroke(c,[[10,-151+torsoY],[16,-153+torsoY]],1.4,p.boot,null);
+ // Individual face rig: round-eyed young fighter Nara with ponytail and freckles.
+ drawFace(c,'nara',torsoY,pose,frame);
  // Shoulder armor & forearm gauntlet. More physical than swordfighter.
  armor(c,-27,-124+torsoY,18,p);armor(c,28,-124+torsoY,18,p);
  stroke(c,[[28,-120+torsoY],[35+arm*.4,-97+torsoY],[44+arm*.8,-81+torsoY-pose.reachY]],16,p.shade);
@@ -172,6 +150,8 @@ function renderCell(info,state,frame){
  c.save();c.translate(CW/2,270);
  const p=poseFor(state,frame);
  if(state==='ko'){c.translate(-26,-8);c.rotate(-1.25)}
+ if(state==='heavy'&&frame>=11&&frame<19)c.rotate(-.045);
+ if(state==='special'&&frame>10&&frame<27)c.rotate(-.065);
  if(info.id==='azur')drawAzur(c,p,frame);else drawNara(c,p,frame);
  c.restore();return canvas;
 }
