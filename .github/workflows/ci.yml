@@ -19,5 +19,10 @@ jobs:
           node --check visuals/characters.js
           node --check visuals/combat.js
           node --check game.js
+          node --check v3/roster.js
+          node --check v3/engine.js
+          node --check v3/art.js
+          node --check v3/stage.js
+          node --check v3/main.js
       - name: Balance and roster unit tests
         run: node --test tests/*.test.mjs
