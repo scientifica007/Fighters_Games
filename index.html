@@ -1,91 +1,103 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#080f1e">
-  <meta name="description" content="صراع العناصر: لعبة قتال ثنائية الأبعاد بشخصيات أصلية وطور لاعب ضد الآلة وطور لاعبين محليين.">
-  <title>صراع العناصر — Fighters Games</title>
-  <link rel="stylesheet" href="./style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a1020">
+<meta name="description" content="صراع العناصر: ولادة المبارزة. لعبة قتال أصلية ثنائية الأبعاد مع رسوم شخصيات مؤطرة وتحكم دقيق بالقتال.">
+<title>صراع العناصر — ولادة المبارزة</title>
+<link rel="stylesheet" href="./v3/style.css">
 </head>
 <body>
-<div class="atmosphere" aria-hidden="true"></div>
-<main class="app">
-  <header class="topbar">
-    <a class="brand" href="./" aria-label="الرئيسية">
-      <span class="brand-mark">✦</span>
-      <span><b>صِراعُ العَناصر</b><small>ELEMENTAL RIVALS · 2D ARENA</small></span>
-    </a>
-    <div class="top-actions">
-      <span class="version">الإصدار 2.0 · Visual Edition</span>
-      <button class="iconbtn" id="soundBtn" type="button" title="تشغيل أو كتم الصوت" aria-label="الصوت">♫ <span id="soundLabel">الصوت: يعمل</span></button>
+<div class="background" aria-hidden="true"></div>
+<header class="site-header">
+ <div class="header-inner">
+  <a class="wordmark" href="./"><span class="emblem">✦</span><span>صِراعُ العَناصِر<small>ELEMENTAL RIVALS / DUEL REBORN</small></span></a>
+  <div class="header-links"><span class="edition">الإصدار التجريبي 3.0</span><a class="old-version" href="./classic/">النسخة الكلاسيكية <span aria-hidden="true">↗</span></a></div>
+ </div>
+</header>
+<main class="layout">
+ <section id="selection" class="selection">
+  <div class="hero-copy">
+    <span class="eyebrow"><span class="indicator"></span> THE DUEL REBORN · النموذج القتالي الجديد</span>
+    <h1>لا تنتصر بالقوة وحدها.<br><em>انتصر بالتوقيت.</em></h1>
+    <p>شخصيتان أصليتان، حلبة سينمائية واحدة، نظام قتال جديد بإطارات محددة للضربات والمجموعات القتالية. هذه بداية إعادة بناء اللعبة، وليست مجرد تحسين لرسوماتها.</p>
+  </div>
+  <div class="eyebrow section-tag">01 — نمط اللعب</div>
+  <div class="mode-options" aria-label="نمط القتال">
+   <button type="button" class="mode-option selected" data-mode="cpu" aria-pressed="true"><span class="mode-glyph">✦</span><span><strong>تحدَّ الآلة</strong><small>واجه مقاتلاً يتحرك ويهاجم ويدافع</small></span><span class="choice-marker">✓</span></button>
+   <button type="button" class="mode-option" data-mode="duel" aria-pressed="false"><span class="mode-glyph">⚔</span><span><strong>مواجهة لاعبين</strong><small>لاعبان · لوحة مفاتيح واحدة</small></span><span class="choice-marker">✓</span></button>
+  </div>
+  <div class="option-line" id="difficultyRow">
+   <span class="form-label">صعوبة الذكاء الاصطناعي</span>
+   <div class="segmented" role="group" aria-label="مستوى الصعوبة">
+     <button type="button" class="diff" data-diff="easy" aria-pressed="false">مبتدئ</button>
+     <button type="button" class="diff active" data-diff="normal" aria-pressed="true">متوسط</button>
+     <button type="button" class="diff" data-diff="hard" aria-pressed="false">متقدم</button>
+   </div>
+  </div>
+  <div class="roster-head"><div><span class="eyebrow section-tag">02 — اختر مقاتلك</span><h2>لكل أسلوب نقطة قوة.</h2></div><span class="roster-note">صحة وضربات أساسية متساوية · اختلاف تكتيكي</span></div>
+  <div class="roster" id="roster" role="group" aria-label="اختيار شخصية اللاعب الأول"></div>
+  <div id="p2Section" class="player2-area" hidden>
+    <span class="eyebrow section-tag">03 — المقاتل الثاني</span>
+    <div id="p2Roster" class="mini-roster" role="group" aria-label="اختيار الشخصية الثانية"></div>
+  </div>
+  <div class="match-card">
+    <div class="match-versus" aria-hidden="true">
+     <div class="match-figure"><canvas id="miniOne" width="210" height="230"></canvas><span id="nameOne">آزر</span></div>
+     <span class="large-vs">VS</span>
+     <div class="match-figure"><canvas id="miniTwo" width="210" height="230"></canvas><span id="nameTwo">نارا</span></div>
     </div>
-  </header>
-
-  <section id="selectionScene" class="selection-scene">
-    <div class="intro">
-      <div class="eyebrow"><span class="dot"></span> ساحة المحاربين · لا تحميلات · دون اتصال</div>
-      <h1>اختر مُحارِبك.<br><em>واصنع أسطورتك.</em></h1>
-      <p>ستة مقاتلين، ستة أساليب مختلفة، وفرص متكافئة. أتقن المسافة والتوقيت والصدّ للوصول إلى حارس البوابة.</p>
+    <div class="match-details">
+     <span class="eyebrow">ساحة الفجر · المرحلة التجريبية</span>
+     <h2>الساحة بانتظارك.</h2>
+     <p>تفادَ، اضرب، صدّ، ثم حوّل إصابتك إلى مجموعة ضربات. تُحسم المواجهة بالفوز بجولتين.</p>
+     <button type="button" id="playBtn" class="primary-button">ادخل ساحة القتال <span>←</span></button>
+     <span class="tiny-note">تعمل مباشرة في المتصفح · دون تسجيل أو تحميل</span>
     </div>
-    <div class="mode-switch" role="group" aria-label="نمط اللعب">
-      <button class="mode active" type="button" data-mode="arcade"><span>◈</span><b>الرحلة الفردية</b><small>لاعب ضد الآلة · 7 مواجهات</small></button>
-      <button class="mode" type="button" data-mode="duel"><span>⚔</span><b>مواجهة ثنائية</b><small>لاعبان على الجهاز نفسه</small></button>
+  </div>
+  <div class="features"><div><b>60 FPS</b><span>محاكاة ثابتة التوقيت</span></div><div><b>FRAME DATA</b><span>بداية الضربة وفعاليتها واستعادتها</span></div><div><b>COMBO SYSTEM</b><span>ضربة خفيفة ← ثقيلة ← خاصة</span></div><div><b>ORIGINAL ART</b><span>شخصيات مرسومة بإطارات حركية</span></div></div>
+ </section>
+ <section id="battle" class="battle" hidden>
+  <div class="battle-toolbar">
+    <div><span class="eyebrow">DUEL REBORN — ساحة الفجر</span><h2 id="battleHeading">آزر في مواجهة نارا</h2></div>
+    <div class="battle-buttons">
+     <button id="soundBtn" class="subtle-button" type="button" aria-pressed="true">المؤثرات: تشغيل</button>
+     <button id="pauseBtn" class="subtle-button" type="button">إيقاف مؤقت Ⅱ</button>
+     <button id="exitBtn" class="subtle-button" type="button">القائمة ↗</button>
     </div>
-
-    <div class="section-heading"><div><span class="eyebrow small">ROSTER / قائمة الشخصيات</span><h2>اختر الشخصية الأولى</h2></div><span class="subtle">كل الشخصيات متساوية في الصحة والضرر الأساسي</span></div>
-    <div id="p1Cards" class="roster" role="group" aria-label="شخصيات اللاعب الأول"></div>
-
-    <section id="duelPick" class="duel-pick" hidden>
-      <div class="section-heading"><div><span class="eyebrow small">PLAYER TWO</span><h2>اختر الشخصية الثانية</h2></div><span class="subtle">يمكن اختيار الشخصية نفسها لكلا اللاعبين</span></div>
-      <div id="p2Cards" class="roster" role="group" aria-label="شخصيات اللاعب الثاني"></div>
-    </section>
-
-    <div class="launch-panel">
-      <div class="launch-preview">
-        <div class="versus-figure"><canvas id="previewOne" width="132" height="142" aria-label="رسم الشخصية الأولى"></canvas><span id="pickedOne">آزر</span></div>
-        <span class="vs">VS</span>
-        <div class="versus-figure"><canvas id="previewTwo" width="132" height="142" aria-label="رسم الخصم"></canvas><span id="pickedTwo">صخر</span></div>
+  </div>
+  <div id="screen" class="game-frame">
+    <canvas id="arena" width="1120" height="630" aria-label="لعبة القتال: شخصيتان متواجهتان داخل قلعة الفجر"></canvas>
+    <div id="intermission" class="intermission" hidden>
+      <div class="dialog">
+        <span id="dialogEyebrow" class="eyebrow">انتهت الجولة</span>
+        <h2 id="dialogTitle">الفائز</h2>
+        <p id="dialogDesc">مباراة ممتعة</p>
+        <div class="dialog-actions">
+          <button id="advanceBtn" class="primary-button" type="button">الجولة التالية ←</button>
+          <button id="restartBtn" class="subtle-button" type="button">إعادة المباراة</button>
+          <button id="menuBtn" class="subtle-button" type="button">القائمة الرئيسية</button>
+        </div>
       </div>
-      <div class="launch-content">
-        <div class="eyebrow small" id="launchEyebrow">رحلة المحارب · سبع مواجهات</div>
-        <h3 id="launchTitle">سبع بوابات تفصلك عن المجد</h3>
-        <p id="launchDesc">تتعلم الآلة تدريجياً قراءة المسافة والدفاع والهجوم. الزعيم النهائي لا يغش بزيادة الصحة أو الضرر.</p>
-        <button id="startBtn" type="button" class="primary">ابدأ القتال <span>←</span></button>
+    </div>
+    <div id="pauseLayer" class="intermission" hidden>
+      <div class="dialog">
+        <span class="eyebrow">PAUSE</span><h2>القتال متوقف</h2>
+        <p>عند استئناف اللعب يعود توقيت الجولة للعمل.</p>
+        <div class="dialog-actions"><button id="resumeBtn" class="primary-button" type="button">استئناف ←</button><button id="pauseMenuBtn" class="subtle-button" type="button">القائمة</button></div>
       </div>
     </div>
-
-    <div class="bottom-info">
-      <div><b>موازنة عادلة</b><span>صحة وحركة وضربات أساسية متطابقة لجميع المقاتلين.</span></div>
-      <div><b>مهارات خاصة</b><span>توقيت واحد وتكلفة موحدة، لكن المسارات والمراوغات مختلفة.</span></div>
-      <div><b>تقدم محفوظ</b><span>الرحلة الفردية تحفظ أعلى مرحلة تم الوصول إليها على جهازك.</span></div>
-    </div>
-  </section>
-
-  <section id="gameScene" class="game-scene" hidden>
-    <div class="game-head">
-      <div><span class="eyebrow small" id="battleKicker">المواجهة الأولى</span><h2 id="battleTitle">البوابة الحجرية</h2></div>
-      <div class="game-head-actions"><button id="pauseBtn" class="secondary" type="button">إيقاف مؤقت <span>Ⅱ</span></button><button id="leaveBtn" class="secondary" type="button">القائمة ↗</button></div>
-    </div>
-    <div id="progressTrack" class="progress-track" aria-label="مراحل الرحلة"></div>
-    <div class="arena-frame">
-      <canvas id="arena" width="960" height="540" aria-label="ساحة القتال ثنائية الأبعاد، يظهر المحاربان مقابل بعضهما"></canvas>
-      <div class="arena-bottom"><span id="arenaHint">حرّك شخصيتك ثم اضرب واصدد.</span><span>ELEMENTAL RIVALS</span></div>
-      <div id="resultOverlay" class="overlay" hidden>
-        <div class="modal"><span id="resultEyebrow" class="eyebrow">انتهى النزال</span><h2 id="resultTitle">انتصار!</h2><p id="resultText"></p><div class="modal-actions"><button id="nextBtn" class="primary" type="button">المواجهة التالية ←</button><button id="rematchBtn" class="secondary" type="button">إعادة المواجهة</button><button id="resultMenuBtn" class="secondary" type="button">القائمة الرئيسية</button></div></div>
-      </div>
-      <div id="pauseOverlay" class="overlay" hidden><div class="modal"><span class="eyebrow">PAUSED</span><h2>القتال متوقف</h2><p>يمكنك استئناف الجولة حين تكون جاهزاً.</p><div class="modal-actions"><button id="resumeBtn" class="primary" type="button">استئناف القتال ←</button><button id="pauseMenuBtn" class="secondary" type="button">القائمة الرئيسية</button></div></div></div>
-    </div>
-    <div class="controls-help">
-      <div class="control-card"><div><span class="p-dot p1"></span><b>اللاعب الأول</b></div><p><kbd>A</kbd><kbd>D</kbd> حركة · <kbd>W</kbd> قفز · <kbd>S</kbd> صدّ · <kbd>F</kbd> خفيفة · <kbd>G</kbd> ثقيلة · <kbd>H</kbd> خاصة</p></div>
-      <div class="control-card" id="secondHelp"><div><span class="p-dot p2"></span><b>اللاعب الثاني</b></div><p><kbd>←</kbd><kbd>→</kbd> حركة · <kbd>↑</kbd> قفز · <kbd>↓</kbd> صدّ · <kbd>J</kbd> خفيفة · <kbd>K</kbd> ثقيلة · <kbd>L</kbd> خاصة</p></div>
-    </div>
-    <div id="touchControls" class="touch-controls" aria-label="أزرار التحكم اللمسية"></div>
-    <p class="touch-advice">على الهاتف، استخدم الوضع الأفقي للحصول على مساحة أكبر. المواجهة الثنائية المحلية أنسب بلوحة مفاتيح.</p>
-  </section>
-
-  <footer><span>صراع العناصر · شخصيات ورسوم أصلية مولدة برمجياً</span><span>HTML5 Canvas · بلا خادم أو مكتبات خارجية</span></footer>
+  </div>
+  <div class="controls">
+    <div class="control-keyboard"><div class="control-title"><span class="player-dot cyan"></span><b>المقاتل الأول</b></div><p><kbd>A</kbd> <kbd>D</kbd> حركة، <kbd>W</kbd> قفز، <kbd>S</kbd> صدّ، <kbd>F</kbd> سريعة، <kbd>G</kbd> ثقيلة، <kbd>H</kbd> خاصة، <kbd>U</kbd> خارقة</p></div>
+    <div class="control-keyboard" id="controlsTwo"><div class="control-title"><span class="player-dot coral"></span><b>المقاتل الثاني</b></div><p><kbd>←</kbd> <kbd>→</kbd> حركة، <kbd>↑</kbd> قفز، <kbd>↓</kbd> صدّ، <kbd>J</kbd> سريعة، <kbd>K</kbd> ثقيلة، <kbd>L</kbd> خاصة، <kbd>O</kbd> خارقة</p></div>
+  </div>
+  <div id="touch" class="touch" aria-label="أزرار التحكم اللمسية"></div>
+  <div class="battle-tip"><span>TIP</span> بعد إصابة ضربة خفيفة، اضغط الثقيلة ثم الخاصة لإلغاء الحركة وتكوين مجموعة. <strong>المهارة الخاصة تستهلك 25 طاقة، والخارقة 100.</strong></div>
+ </section>
 </main>
-<script type="module" src="./game.js"></script>
+<footer class="footer"><span>صراع العناصر — ولادة المبارزة | نموذج قتالي أصلي</span><span>النسخة السابقة محفوظة <a href="./classic/">هنا</a> · لا موسيقى خلفية</span></footer>
+<script type="module" src="./v3/main.js"></script>
 </body>
 </html>
