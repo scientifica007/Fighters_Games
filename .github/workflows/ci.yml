@@ -24,6 +24,8 @@ jobs:
           node --check v3/art.js
           node --check v3/stage.js
           node --check v3/main.js
+          node --check v3/faces.js
+          node --check v3/mobile-controls.js
       - name: Balance and roster unit tests
         run: node --test tests/*.test.mjs
       - name: Headless browser smoke (menu and generated fighter portraits)
@@ -40,4 +42,9 @@ jobs:
             grep -q 'class="fighter-details"' /tmp/fighters-rendered.html
             grep -q 'fighter selected' /tmp/fighters-rendered.html
             echo "Browser imported v3 modules and rendered character cards successfully."
+            timeout 45 "$CHROME" --headless --no-sandbox --disable-dev-shm-usage \
+              --disable-gpu --no-first-run --virtual-time-budget=6500 \
+              --dump-dom http://127.0.0.1:8765/tests/arena-browser.html > /tmp/fighters-arena.html 2> /tmp/fighters-arena.log
+            grep -q 'ARENA_SMOKE_OK' /tmp/fighters-arena.html
+            echo "Browser started combat, generated nonempty arena pixels and mounted split touch controls."
           fi
